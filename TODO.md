@@ -3,7 +3,7 @@
 ## Fase 0 --- Persiapan
 
 - [ ] Requirement & user stories
-- [ ] Pilih stack & buat repo git
+- [x] Pilih stack & buat repo git
 - [ ] Wireframes UI
 - [ ] Draft schema DB
 
@@ -11,8 +11,8 @@
 
 - [x] Inisialisasi project
 - [x] Setup linting & CI
-- [ ] Implement login (PIN/password)
-- [ ] Setup SQLite (migrations awal)
+- [x] Implement login (PIN/password)
+- [x] Setup SQLite (migrations awal)
 
 ## Fase 2 --- CRUD Produk & Stok
 
