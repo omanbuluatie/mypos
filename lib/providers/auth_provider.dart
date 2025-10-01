@@ -5,8 +5,9 @@ import '../models/role.dart';
 class AuthState {
   final bool isLoggedIn;
   final Role? role;
+  final int? userId;
 
-  AuthState({required this.isLoggedIn, this.role});
+  AuthState({required this.isLoggedIn, this.role, this.userId});
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -18,24 +19,33 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
     final roleString = prefs.getString('role');
+    final userId = prefs.getInt('userId');
     Role? role;
     if (roleString != null) {
       role = Role.values.firstWhere((e) => e.name == roleString);
     }
-    state = AuthState(isLoggedIn: isLoggedIn, role: role);
+    state = AuthState(isLoggedIn: isLoggedIn, role: role, userId: userId);
   }
 
   Future<bool> login(String pin) async {
     Role? role;
-    if (pin == '1111') role = Role.kasir;
-    else if (pin == '2222') role = Role.manager;
-    else if (pin == '3333') role = Role.owner;
-    else return false;
+    int? userId;
+    if (pin == '1111') {
+      role = Role.kasir;
+      userId = 1;
+    } else if (pin == '2222') {
+      role = Role.manager;
+      userId = 2;
+    } else if (pin == '3333') {
+      role = Role.owner;
+      userId = 3;
+    } else return false;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     await prefs.setString('role', role.name);
-    state = AuthState(isLoggedIn: true, role: role);
+    await prefs.setInt('userId', userId);
+    state = AuthState(isLoggedIn: true, role: role, userId: userId);
     return true;
   }
 
@@ -43,6 +53,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('isLoggedIn');
     await prefs.remove('role');
+    await prefs.remove('userId');
     state = AuthState(isLoggedIn: false);
   }
 }
